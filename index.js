@@ -6,11 +6,10 @@ require('dotenv').config();
 const app = express();
 
 // --- MIDDLEWARE ---
-app.use(express.json()); // Allows the server to understand JSON data from your Android app
-app.use(cors());         // Allows your Android app to talk to this server from a different domain
+app.use(express.json()); 
+app.use(cors());         
 
 // --- MONGODB CONNECTION ---
-// We use process.env.MONGO_URI so your password stays hidden in Render's "Environment Variables"
 const mongoURI = process.env.MONGO_URI;
 
 mongoose.connect(mongoURI)
@@ -21,23 +20,14 @@ mongoose.connect(mongoURI)
         console.error("❌ DATABASE ERROR: Connection failed!", err);
     });
 
-// --- TEST ROUTE ---
-// You can visit your Render URL in a browser to see this message
+// --- HOME ROUTE (This fixes the 'Not Found' error) ---
 app.get('/', (req, res) => {
-    res.status(200).send({
-        status: "Online",
-        message: "Smart Campus Backend API is officially LIVE!",
-        timestamp: new Date()
-    });
+    res.status(200).send("Smart Campus API is officially LIVE and Working!");
 });
 
 // --- START SERVER ---
-// Render will automatically assign a PORT, otherwise it uses 3000 locally
-const PORT = process.env.PORT || 3000;
+// Render uses port 10000 by default, so we use process.env.PORT
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`🚀 Server is flying on port ${PORT}`);
-
-});
-app.get('/', (req, res) => {
-    res.send("Smart Campus API is officially LIVE!");
 });
